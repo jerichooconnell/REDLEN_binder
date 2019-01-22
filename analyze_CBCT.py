@@ -11,8 +11,8 @@ import matplotlib
 import matplotlib.patches as mpatches
 from matplotlib.offsetbox import (DrawingArea, OffsetImage,AnnotationBbox)
     
-matplotlib.rc('xtick', labelsize=8) 
-matplotlib.rc('ytick', labelsize=8) 
+matplotlib.rc('xtick', labelsize=12) 
+matplotlib.rc('ytick', labelsize=12) 
 
 import matplotlib.pyplot as plt
 from PIL import Image
@@ -988,7 +988,7 @@ def main_Kedge_subtracted_HU_norm(dir_data):
 
     imagebox = OffsetImage(arr_img, zoom=0.1)
     imagebox.image.axes = ax[2]
-    offset = 1.7
+    offset = 2.0
 
     ab = AnnotationBbox(imagebox, (5,0),
                         xybox=(0, -7),
@@ -1094,7 +1094,7 @@ def main_Kedge_subtracted_HU_norm(dir_data):
     imagebox = OffsetImage(arr_img, zoom=0.1)
     imagebox.image.axes = ax[1]
 
-    ab = AnnotationBbox(imagebox, (2,0),
+    ab = AnnotationBbox(imagebox, (1.9,0),
                         xybox=(0, -7),
                         xycoords=("data", "axes fraction"),
                         boxcoords="offset points",
@@ -1167,15 +1167,15 @@ def main_Kedge_subtracted_HU_norm(dir_data):
     ax[2].plot(x, x,'--', color='k',linewidth=0.5,label='Theoretical')
     #fig.patch.set_facecolor('k')
 
-    ax[2].set_title('Gold')
-    ax[0].set_title('Iodine')
-    ax[1].set_title('Gadolinium')
+    ax[2].set_title('c) Gold',size=14)
+    ax[0].set_title('a) Iodine',size=14)
+    ax[1].set_title('b) Gadolinium',size=14)
     
     ax[2].set_ylabel('%Au')
     ax[0].set_ylabel('%I')
     ax[1].set_ylabel('%Gd')
     
-    SIZE =8
+    SIZE = 10
     ax[2].set_xlabel('ROI',fontsize=SIZE)
     ax[0].set_xlabel('ROI',fontsize=SIZE)
     ax[1].set_xlabel('ROI',fontsize=SIZE)
@@ -1374,6 +1374,7 @@ def main_Kedge_subtracted_HU_plot(dir_data):
 
     #all_image = (ct_image_Gd+ct_image_Au)/2
     #import ipdb; ipdb.set_trace()
+    
 
     #ct_image_I = ct_image_I / all_image
     #ct_image_Au = ct_image_Au / all_image
@@ -2424,7 +2425,7 @@ def getAirRegion(size):
 
 def end_plotCNR(dir_data):
     # For plotting CC
-    SIZE = 14
+    SIZE = 12   
     #dir_data = "./data_no_smoothing/"
     dir_images = "./images/"
 
@@ -2468,7 +2469,7 @@ def end_plotCNR(dir_data):
     ax[0,0].set_ylabel("CNR", size=SIZE)
     ax[0,0].legend(loc=0, fontsize=SIZE)
     ax[0,0].set_ylim([0, 60])
-    ax[0,0].set_title("Iodine Contrast")
+    ax[0,0].set_title("a) Iodine", size=14)
     #plt.savefig(dir_images+"CNR_multiplex_iodine_SEC.png")
     #ax[0,0].show()
 
@@ -2482,7 +2483,7 @@ def end_plotCNR(dir_data):
     ax[0,1].bar(indices, gd_cnr5, width=width,
             color='#147A00', label='5% Gd', yerr=gd_err5, ecolor="k")
     ax[0,1].bar([i + 0.25 * 0.4 * width for i in indices], gd_cnr1,
-            width=0.8 * width, color='#37D710', label='1% Gd', yerr=gd_err1, ecolor="k")
+            width=0.8 * width, color='#37D710', label='2% Gd', yerr=gd_err1, ecolor="k")
     ax[0,1].axhline(4, color="r", linewidth=3, linestyle="--")
     ax[0,1].grid(True)
     #ax = plt.gca() 
@@ -2494,7 +2495,7 @@ def end_plotCNR(dir_data):
     ax[0,1].set_ylabel("CNR", size=SIZE)
     ax[0,1].legend(loc=0, fontsize=SIZE)
     ax[0,1].set_ylim([0, 25])
-    ax[0,1].set_title("Gadolinium Contrast")
+    ax[0,1].set_title("b) Gadolinium", size=14)
     #plt.savefig(dir_images+"CNR_multiplex_gadolinium_SEC.png")
     #ax[0,1].show()
     
@@ -2520,10 +2521,10 @@ def end_plotCNR(dir_data):
     ax[1,0].set_ylabel("CNR", size=SIZE)
     ax[1,0].legend(loc=0, fontsize=SIZE)
     ax[1,0].set_ylim([0, 25])
-    ax[1,0].set_title("Gold Contrast")
+    ax[1,0].set_title("c) Gold", size=14)
     #ax[1,0].show()
     fig.tight_layout()
-    #plt.savefig(dir_images+"CNR_multiplex_gold_SEC.png")    
+    plt.savefig("CNR_multiplex_gold_SEC.png")    
 
 def end_plotCNR_3(dir_data):
     # For plotting CC
@@ -2578,7 +2579,7 @@ def end_plotCNR_3(dir_data):
     plt.bar(indices, gd_cnr5, width=width,
             color='#147A00', label='5% Gd', yerr=gd_err5, ecolor="k")
     plt.bar([i + 0.25 * 0.4 * width for i in indices], gd_cnr1,
-            width=0.8 * width, color='#37D710', label='1% Gd', yerr=gd_err1, ecolor="k")
+            width=0.8 * width, color='#37D710', label='2% Gd', yerr=gd_err1, ecolor="k")
     plt.axhline(4, color="r", linewidth=3, linestyle="--")
     plt.grid(True)
     plt.xticks(indices + width / 2., ["K-edge", "SEC2", "SEC3", "Sum"], size=SIZE)
@@ -2611,7 +2612,7 @@ def end_plotCNR_3(dir_data):
     plt.ylim([0, 60])
     plt.xlim([-0.5, 0.5])
     plt.title("CNR of Multiplexed Spectral CT \n with Gold Contrast - SEC")
-    plt.savefig(dir_images+"CNR_multiplex_gold_SEC.png")
+    plt.savefig("CNR_multiplex_gold_SEC.png")
     plt.show()
 
 
