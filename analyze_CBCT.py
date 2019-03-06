@@ -492,7 +492,7 @@ def main_Kedge_subtracted_HU(dir_data):
     air_noise6 = np.sum(noise_air_image) / number_of_air_pixels
     ct_image6 = 1000 * ((img6 - background_noise6)/(background_noise6 - air_noise6))
     
-    ct_image_I = (ct_image1 - ct_image0)
+    ct_image_I = (ct_image2 - ct_image1)
     ct_image_Gd = (ct_image3  - ct_image2)
     ct_image_Au = (ct_image5  - ct_image4)
     
@@ -517,7 +517,7 @@ def main_Kedge_subtracted_HU(dir_data):
     ct_image_Gd /= av_Gd
     
     ct_image_I *= 5
-    ct_image_Au *= 5
+    ct_image_Au *= 0.5
     ct_image_Gd *= 5
     
     TEXT_SIZE = 8
@@ -535,6 +535,21 @@ def main_Kedge_subtracted_HU(dir_data):
     ax[1,1].set_xticks(ticks = [-1.5, 0, 1.5])
     ax[1,1].set_yticks(ticks = [-1.5, 0, 1.5])
     ax[1,1].set_title('d) CT image',size=TEXT_SIZE)
+    
+    inds = np.asarray([
+            [0.043384339242731656, -0.8685768839103873],
+            [0.8455737486113676, -0.41031619144602895],
+            [0.8255065388354005, 0.4471379837067202],
+            [0.064384339242731656, 0.8953314663951112],
+            [-0.703338675013887, 0.4320707739307531],
+            [-0.728050701259043, -0.372538340122199655],
+            [0.6398425877152363, -0.9968416496945014]])
+    
+    size = 0.23
+    for ii in range(inds.shape[0]):
+        # import ipdb;ipdb.set_trace()
+        circle = plt.Circle((inds[ii,0], inds[ii,1]), size, color='r', fill=False)
+        ax[1,1].add_artist(circle)
     
     im = ax[0,0].imshow(ct_image_I, extent=(-radius,radius,-radius,radius), cmap=purp, vmin = 0, vmax = 5)
     
@@ -560,7 +575,7 @@ def main_Kedge_subtracted_HU(dir_data):
     ax[0,1].set_yticks(ticks = [-1.5, 0, 1.5])
     ax[0,1].set_title('b) Gadolinium',size=TEXT_SIZE)
     
-    im = ax[1,0].imshow(ct_image_Au, extent=(-radius,radius,-radius,radius), cmap=gold, vmin = 0, vmax = 5)
+    im = ax[1,0].imshow(ct_image_Au, extent=(-radius,radius,-radius,radius), cmap=gold, vmin = 0, vmax = 0.5)
     
     cbar = fig.colorbar(im, ax=ax[1,0])
     cbar.set_label("% Au", rotation=270,labelpad=TEXT_SIZE,size=TEXT_SIZE)
@@ -574,7 +589,8 @@ def main_Kedge_subtracted_HU(dir_data):
     
     fig.tight_layout()
     
-    plt.savefig('4_layout2.png',dpi = 800)
+    plt.savefig('4_layout2.eps',dpi = 400)
+    plt.savefig('4_layout2.png',dpi = 300)
     
     '''
     subplot2DImage(ct_image_I, extent=(-radius,radius,-radius,radius), colourmap=plt.get_cmap("Purples"), label_x="x [cm]",
@@ -658,11 +674,11 @@ def main_Kedge_subtracted_HU_norm(dir_data):
     i = 15
     
     #plt.style.use('dark_background')
-    fig, ax = plt.subplots(nrows=3,ncols=1,figsize=(10,10), dpi=300)
+    fig, ax = plt.subplots(nrows=3,ncols=1,figsize=(3.5,10.5), dpi=300)
     
-    ax[0] = plt.subplot(2, 2, 1)
-    ax[1] = plt.subplot(2, 2, 2)
-    ax[2] = plt.subplot(2, 2, 3)
+    ax[0] = plt.subplot(3, 1, 1)
+    ax[1] = plt.subplot(3, 1, 2)
+    ax[2] = plt.subplot(3, 1, 3)
 
     
     SIZE = 8
@@ -938,7 +954,7 @@ def main_Kedge_subtracted_HU_norm(dir_data):
         plt.savefig('concentrations.png')
         '''
         indices2 = 0 + (slice_no - 11.5)*0.03
-        msize = 6
+        msize = 8
         ax[0].scatter(5 + indices2, av_I,marker='_',
                 color='darkgray',s=msize)
         indices[0] += 1
@@ -1126,7 +1142,7 @@ def main_Kedge_subtracted_HU_norm(dir_data):
                   color=(0,1.0,0),marker='x',)
     indices[0] += 1
     ax[2].errorbar(5, np.mean(au5), yerr = np.std(au5),
-                  color=(1.0,0.85,0),marker='x',)
+                  color=(1.0,0.65,0),marker='x',)
     indices[0] += 1
     indices[0] += 1
 
@@ -1134,7 +1150,7 @@ def main_Kedge_subtracted_HU_norm(dir_data):
     indices[0] += 1
     ax[1].errorbar(2, np.mean(gd1), yerr = np.std(gd1), color=(0,1.0,0),marker='x')
     indices[0] += 1
-    ax[2].errorbar(1, np.mean(au1), yerr = np.std(au1), color=(1.0,0.85,0),marker='x')
+    ax[2].errorbar(1, np.mean(au1), yerr = np.std(au1), color=(1.0,0.65,0),marker='x')
     indices[0] += 1
     indices[0] += 1
 
@@ -1143,7 +1159,7 @@ def main_Kedge_subtracted_HU_norm(dir_data):
     indices[0] += 1
     ax[1].errorbar(0, np.mean(gd0), yerr = np.std(gd0), color=(0,1.0,0),marker='x')
     indices[0] += 1
-    ax[2].errorbar(0, np.mean(au0), yerr = np.std(au0), color=(1.0,0.85,0),marker='x')  
+    ax[2].errorbar(0, np.mean(au0), yerr = np.std(au0), color=(1.0,0.65,0),marker='x')  
     
     x = [0,1,5]
     y = [np.mean(i0),np.mean(i1),np.mean(i5)]
@@ -1155,16 +1171,16 @@ def main_Kedge_subtracted_HU_norm(dir_data):
     
     x = [0,1,5]
     y = [np.mean(au0),np.mean(au1),np.mean(au5)]
-    ax[2].plot(np.unique(x), np.poly1d(np.polyfit(x, y, 1))(np.unique(x)),'--', color=(1.0,0.85,0),linewidth=0.5,label='Linear fit')
+    ax[2].plot(np.unique(x), np.poly1d(np.polyfit(x, y, 1))(np.unique(x)),'--', color=(1.0,0.65,0),linewidth=0.5,label='Linear fit')
 
     x = [0,1,5]
-    ax[0].plot(x, x,'--', color='k',linewidth=0.5,label='Theoretical')
+    ax[0].plot(x, x,'-', color='k',linewidth=0.5,label='Theoretical')
     
     x = [0,2,5]
-    ax[1].plot(x, x,'--', color='k',linewidth=0.5,label='Theoretical')
+    ax[1].plot(x, x,'-', color='k',linewidth=0.5,label='Theoretical')
     
     x = [0,1,5]
-    ax[2].plot(x, x,'--', color='k',linewidth=0.5,label='Theoretical')
+    ax[2].plot(x, x,'-', color='k',linewidth=0.5,label='Theoretical')
     #fig.patch.set_facecolor('k')
 
     ax[2].set_title('c) Gold',size=14)
@@ -1175,10 +1191,10 @@ def main_Kedge_subtracted_HU_norm(dir_data):
     ax[0].set_ylabel('%I')
     ax[1].set_ylabel('%Gd')
     
-    SIZE = 10
+    SIZE = 14
     ax[2].set_xlabel('ROI',fontsize=SIZE)
     ax[0].set_xlabel('ROI',fontsize=SIZE)
-    ax[1].set_xlabel('ROI',fontsize=SIZE)
+    ax[1].set_xlabel('         ROI',fontsize=SIZE)
     ax[0].grid(True)
     ax[1].grid(True)
     ax[2].grid(True)
@@ -1200,8 +1216,8 @@ def main_Kedge_subtracted_HU_norm(dir_data):
     ax[2].legend(loc=4)             
 
     
-    #fig.tight_layout()
-    plt.savefig('concentrations.png')
+    fig.tight_layout()
+    plt.savefig('concentrations.eps')
     
     
     ct_image_Au[ct_image_Au < 0] = 0
@@ -2389,7 +2405,7 @@ def getVialRegion(vial_type, size):
 def getBackgroundRegion(size):
     #grabs the water region in middle of phantom
     mask = np.zeros([size, size])
-    radius = 10
+    radius = 5
     for i in range(0, size):
         for j in range(0, size):
             # first ROI
@@ -2507,9 +2523,9 @@ def end_plotCNR(dir_data):
     indices = np.arange(len(au_cnr1))
     width = 0.8
     ax[1,0].bar(indices, au_cnr5, width=width,
-            color='#CB870F', label='5% Au', yerr=au_err5, ecolor="k")
+            color='#CB870F', label='2% Au', yerr=au_err5, ecolor="k")
     ax[1,0].bar([i + 0.25 * 0.4 * width for i in indices], au_cnr1,
-            width=0.8 * width, color='#F0E102', label='1% Au', yerr=au_err1, ecolor="k")
+            width=0.8 * width, color='#F0E102', label='0.4% Au', yerr=au_err1, ecolor="k")
     ax[1,0].axhline(4, color="r", linewidth=3, linestyle="--") #this is the Rose criterion
     ax[1,0].grid(True)
     #import ipdb; ipdb.set_trace()
@@ -2524,7 +2540,7 @@ def end_plotCNR(dir_data):
     ax[1,0].set_title("c) Gold", size=14)
     #ax[1,0].show()
     fig.tight_layout()
-    plt.savefig("CNR_multiplex_gold_SEC.png")    
+    plt.savefig("CNR_multiplex_gold_SEC.eps")    
 
 def end_plotCNR_3(dir_data):
     # For plotting CC
@@ -2753,5 +2769,8 @@ def plot_composite():
     ax1.set_title('b) Composite K-edge image',size = 10)
     ax2.imshow(alphaBlended2)
     ax2.set_title('c) Overlay',size = 10)
-    f.savefig('rgb3.png',dpi=600)
+    ax1.text(70,25,'2% Au',color=(1.0,0.65,0))
+    ax1.text(10,25,'5% Gd',color=(0,1.0,0))
+    ax1.text(45,115,'5% I',color=(1.0,0,1.0))
+    f.savefig('Figure5.eps',dpi=350)
     plt.show()
