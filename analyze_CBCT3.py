@@ -10,6 +10,7 @@ from ShowPlots import *
 import matplotlib
 import matplotlib.patches as mpatches
 from matplotlib.offsetbox import (DrawingArea, OffsetImage,AnnotationBbox)
+from scipy import stats
     
 matplotlib.rc('xtick', labelsize=12) 
 matplotlib.rc('ytick', labelsize=12) 
@@ -589,7 +590,7 @@ def main_Kedge_subtracted_HU(dir_data):
     
     fig.tight_layout()
     
-    plt.savefig('4_layout2.eps',dpi = 400)
+    plt.savefig('Figure4.eps',dpi = 400)
     plt.savefig('4_layout2.png',dpi = 300)
     
     '''
@@ -606,13 +607,13 @@ def main_Kedge_subtracted_HU(dir_data):
                 imkwargs={"vmin": 0, "vmax": 5})
     '''
     
-#     ct_image_Au[ct_image_Au < 0] = 0
-#     ct_image_I[ct_image_I < 0] = 0
-#     ct_image_Gd[ct_image_Gd < 0] = 0
+    ct_image_Au[ct_image_Au < 0] = 0
+    ct_image_I[ct_image_I < 0] = 0
+    ct_image_Gd[ct_image_Gd < 0] = 0
 
-#     ct_image_Au[ct_image_Au > 300] = 300
-#     ct_image_I[ct_image_I > 300] = 300
-#     ct_image_Gd[ct_image_Gd > 300] = 300
+    ct_image_Au[ct_image_Au > 300] = 300
+    ct_image_I[ct_image_I > 300] = 300
+    ct_image_Gd[ct_image_Gd > 300] = 300
  
     #plt.figure()
     # plot_as_rgb2(ct_image_Au,ct_image_Gd,ct_image_I,img6)
@@ -1166,14 +1167,24 @@ def main_Kedge_subtracted_HU_norm(dir_data):
     y = [np.mean(i0),np.mean(i1),np.mean(i5)]
     ax[0].plot(np.unique(x), np.poly1d(np.polyfit(x, y, 1))(np.unique(x)),'--', color=(1.0,0,1.0),linewidth=0.5,label='Linear fit')
     
+    slope, intercept, r_value, s, t = stats.linregress(x,y)
+    print('iodine r2',r_value**2)
+    
+    
     x = [0,2,5]
     y = [np.mean(gd0),np.mean(gd1),np.mean(gd5)]
     ax[1].plot(np.unique(x), np.poly1d(np.polyfit(x, y, 1))(np.unique(x)),'--g',linewidth=0.5,label='Linear fit')
+    
+    slope, intercept, r_value, s, t = stats.linregress(x,y)
+    print('gadolinium r2',r_value**2)
     
     x = [0,1,5]
     x2 = [0,0.4,2]
     y = [np.mean(au0),np.mean(au1),np.mean(au5)]
     ax[2].plot(np.unique(x), np.poly1d(np.polyfit(x, y, 1))(np.unique(x)),'--', color='#FFA500',linewidth=0.5,label='Linear fit')
+    
+    slope, intercept, r_value, s, t = stats.linregress(x,y)
+    print('gold r2',r_value**2)
 
     x = [0,1,5]
     ax[0].plot(x, x, color='k',linewidth=0.5,label='Theoretical')
@@ -2697,7 +2708,7 @@ def plot_as_rgb2(r,g,b,m_1,m_2,m_3,gray):
     ax0.imshow(gray, cmap=plt.cm.gray)
     scipy.misc.imsave('gray.png', gray)
     ax1.imshow(rgbArray)
-    scipy.misc.imsave('rgb.jpg', rgbArray)
+    scipy.misc.imsave('rgb.png', rgbArray)
     #ax2.imshow(img_masked)
     plt.show()
     
@@ -3335,7 +3346,7 @@ def plot_composite():
         return newImage
 
     # Take two images for blending them together   
-    image1 = Image.open("./rgb.jpg")
+    image1 = Image.open("./rgb.png")
     image2 = Image.open("./gray.png")
 
     # Make the images of uniform size
